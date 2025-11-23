@@ -1,9 +1,19 @@
 import { Module } from '@nestjs/common';
+import { ConfigModule } from '@nestjs/config';
+import { validate } from 'env.validation';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import configuration from './config/configuration';
 
 @Module({
-  imports: [],
+  imports: [
+    ConfigModule.forRoot({
+      envFilePath: ['.env.development.local'],
+      load: [configuration],
+      validate: validate,
+      isGlobal: true,
+    }),
+  ],
   controllers: [AppController],
   providers: [AppService],
 })
