@@ -1,10 +1,10 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { AuthModule } from '@thallesp/nestjs-better-auth';
 import { validate } from 'env.validation';
 import configuration from './config/configuration';
-import { auth } from './lib/auth';
+import { Account } from './user/entities/account.entity';
+import { User } from './user/entities/user.entity';
 import { UserModule } from './user/user.module';
 
 @Module({
@@ -24,10 +24,13 @@ import { UserModule } from './user/user.module';
         username: configService.get<string>('database.username'),
         password: configService.get<string>('database.password'),
         database: configService.get<string>('database.name'),
+        entities: [User, Account],
+        synchronize: true,
+        logging: true,
       }),
     }),
-    AuthModule.forRoot({ auth }),
     UserModule,
+    // AuthModule,
   ],
 })
 export class AppModule {}
